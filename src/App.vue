@@ -4,32 +4,34 @@
 -->
 <template>
     <div class="container" v-cloak>
-      <div class="menu" v-if="status=='default'">
-        <nav class="navbtn" @click="changestatus" data-key="default">Play</nav>
-        <nav class="navbtn" @click="changestatus" data-key="edit">Edit map by yourself</nav>
-        <nav class="navbtn" @click="importmap">Import maps</nav>
-        <nav class="navbtn" @click="share">Share Box-pusher!</nav>
-      </div>
-      
-      <div class="menu" v-if="status=='edit'">
-        <nav class="navbtn" @click="changestatus"  data-key="default">Return</nav>
-        <nav class="navbtn" @click="save">Save & Output your map</nav>
-        <nav class="navbtn" @click="playnow">Play it right now</nav>
-      </div>
-      <BoxPusher v-if="status=='default'" />
-      <MapEditor v-if="status=='edit'" />
+      <BoxPusher v-if="status=='default'" ref="stage" @changestatus="changestatus" :fmap="map" :fstage="stage" />
+      <MapEditor v-if="status=='edit'" @changestatus="changestatus" @play="play" />
     </div>
 </template>
 
 <script>
 import BoxPusher from "./components/BoxPusher";
 import MapEditor from "./components/MapEditor";
+var defaultmap = {
+  map:[
+        //0墙 1活动区域 2人物 3箱子 4终点 5箱子和终点重合
+        0, 0, 0, 0, 0, 0, 
+        0, 2, 1, 1, 1, 0, 
+        0, 1, 3, 3, 1, 0, 
+        0, 1, 1, 0, 0, 0,
+        0, 1, 1, 1, 4, 0, 
+        0, 1, 1, 1, 4, 0, 
+        0, 0, 0, 0, 0, 0,
+      ],
+  stage:[6,7],
+}
 export default {
   data(){
     return {
-      status:'edit',
+      status:'default',
     }
   },
+  mixins:[defaultmap],
   name: 'App',
   components: {
     BoxPusher,
@@ -39,18 +41,11 @@ export default {
     changestatus(e){
       this.status = e.currentTarget.dataset.key;
     },
-    importmap(){
-
+    play(map){
+      this.map = map.map;
+      this.stage = map.stage;
+      this.status = 'default';
     },
-    share(){
-
-    },
-    save(){
-
-    },
-    playnow(){
-
-    }
   }
 }
 </script>
@@ -84,10 +79,18 @@ html,body{
   color:orange;
   display:flex;
   flex-direction: column;
+  margin-right:100px;
 }
 
 .menu .navbtn{
-  margin:0 20px 40px;
+  line-height:20px;
+  padding:10px;
+  margin-top:10px;
+  font-size:20px;
+  color:white;
+  border:0;
+  background: orange;
+  font-weight: bold;
   cursor:pointer;
 }
 </style>
