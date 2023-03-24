@@ -26,6 +26,13 @@
       </div>
       
       <div class="editable" v-if="show">
+        <div class="initData">
+          row block：{{stage[0]}}
+          <br>
+          column block：{{stage[1]}}
+          <br>
+          box counts：{{box_count}}
+        </div>
         <div class="map">
           <div class="row" v-for="(item, index) in static_map" :key="index">
             <div
@@ -46,8 +53,8 @@
         <div class="iconlist">
           <div class="block stone"></div>
           <div class="block back"></div>
-          <div class="block box"></div>
           <div class="block player"></div>
+          <div class="block box"></div>
           <div class="block dream"></div>
         </div>
         <div class="iconlist">
@@ -399,6 +406,10 @@ input:hover{
 .iconlist .block{
   line-height:40px;
   text-align: center;
+}
+
+.initData{
+  margin-bottom: 10px;
 }
 
 </style>
